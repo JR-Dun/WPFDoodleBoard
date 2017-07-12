@@ -23,9 +23,15 @@ public enum DoodleEnumType
 ```
 //设置涂鸦类型
 doodle.SetDrawType(Doodle.DoodleEnum.DoodleEnumType.draw);
+//撤销
+doodle.Undo();
+//清空
+doodle.Clear();
+
 
 //涂鸦模式
 doodle.SetCanDraw();
+
 //选择模式（点击形状可以平移、拉伸、旋转）
 doodle.SetCanSelect();
 
