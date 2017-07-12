@@ -1,0 +1,60 @@
+﻿<Window x:Class="WPFDoodleBoard.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFDoodleBoard"
+        xmlns:my="clr-namespace:WPFDoodleBoard"
+        mc:Ignorable="d"
+        Title="涂鸦板" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <my:DoodleControl x:Name="doodle" Background="#666666"></my:DoodleControl>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button Name="buttonDraw" Content="涂鸦" Width="30" Click="buttonDraw_Click"></Button>
+            <Button Name="buttonLine" Content="直线" Width="30" Click="buttonLine_Click"></Button>
+            <Button Name="buttonRect" Content="矩形" Width="30" Click="buttonRect_Click"></Button>
+            <Button Name="buttonCircle" Content="圆" Width="30" Click="buttonCircle_Click"></Button>
+            <Button Name="buttonArrow" Content="箭头" Width="30" Click="buttonArrow_Click"></Button>
+            <Button Name="buttonCube" Content="立方体" Width="40" FontSize="10" Click="buttonCube_Click"></Button>
+            <Button Name="buttonCylinder" Content="圆柱体" Width="40" FontSize="10" Click="buttonCylinder_Click"></Button>
+            <Button Name="buttonCone" Content="圆锥体" Width="40" FontSize="10" Click="buttonCone_Click"></Button>
+
+            <Button Name="buttonBlack" Width="30" Click="buttonBlack_Click">
+                <Border Background="black" Width="20" Height="20"></Border>
+            </Button>
+            <Button Name="buttonBlue" Width="30" Click="buttonBlue_Click">
+                <Border Background="Blue" Width="20" Height="20"></Border>
+            </Button>
+            <Button Name="buttonRed" Width="30" Click="buttonRed_Click">
+                <Border Background="Red" Width="20" Height="20"></Border>
+            </Button>
+            <Button Name="buttonGreen" Width="30" Click="buttonGreen_Click">
+                <Border Background="Green" Width="20" Height="20"></Border>
+            </Button>
+            <Button Name="buttonOrange" Width="30" Click="buttonOrange_Click">
+                <Border Background="Orange" Width="20" Height="20"></Border>
+            </Button>
+            
+            <Button Name="buttonBrush1" Width="30" Click="buttonBrush1_Click">
+                <Border Background="#666666" CornerRadius="2" Width="4" Height="4"></Border>
+            </Button>
+            <Button Name="buttonBrush2" Width="30" Click="buttonBrush2_Click">
+                <Border Background="#666666" CornerRadius="3" Width="6" Height="6"></Border>
+            </Button>
+            <Button Name="buttonBrush3" Width="30" Click="buttonBrush3_Click">
+                <Border Background="#666666" CornerRadius="4" Width="8" Height="8"></Border>
+            </Button>
+            <Button Name="buttonBrush4" Width="30" Click="buttonBrush4_Click">
+                <Border Background="#666666" CornerRadius="5" Width="10" Height="10"></Border>
+            </Button>
+
+            <Button Name="buttonModeDraw" Content="涂鸦模式" Margin="130,0,0,0" Click="buttonModeDraw_Click"></Button>
+            <Button Name="buttonModeSelect" Content="选择模式" Margin="2,0,0,0" Click="buttonModeSelect_Click"></Button>
+        </StackPanel>
+    </Grid>
+</Window>
