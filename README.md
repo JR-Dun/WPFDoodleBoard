@@ -36,3 +36,8 @@ doodle.SetCanDraw();
 doodle.SetCanSelect();
 
 ```
+
+## 截图
+![Alt text](https://github.com/JR-Dun/WPFDoodleBoard/raw/master/Screenshots/1.png)
+![Alt text](https://github.com/JR-Dun/WPFDoodleBoard/raw/master/Screenshots/2.png)
+
