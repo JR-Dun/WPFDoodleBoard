@@ -27,7 +27,9 @@ namespace WPFDoodleBoard.Doodle
             blue,
             red,
             green,
-            orange
+            orange,
+            white,
+            yellow
         };
 
         public enum DoodleEnumBrushType

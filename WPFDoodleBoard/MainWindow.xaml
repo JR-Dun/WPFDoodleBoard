@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WPFDoodleBoard"
         xmlns:my="clr-namespace:WPFDoodleBoard"
         mc:Ignorable="d"
-        Title="涂鸦板" Height="450" Width="800">
+        Title="涂鸦板" Height="450" Width="840">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -16,6 +16,7 @@
         <my:DoodleControl x:Name="doodle" Background="#666666"></my:DoodleControl>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Button Name="buttonDraw" Content="涂鸦" Width="30" Click="buttonDraw_Click"></Button>
+            <Button Name="buttonEraser" Content="擦除" Width="30" Click="buttonEraser_Click"></Button>
             <Button Name="buttonLine" Content="直线" Width="30" Click="buttonLine_Click"></Button>
             <Button Name="buttonRect" Content="矩形" Width="30" Click="buttonRect_Click"></Button>
             <Button Name="buttonCircle" Content="圆" Width="30" Click="buttonCircle_Click"></Button>

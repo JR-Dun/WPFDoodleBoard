@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Canvas Name="doodleCanvas" Margin="0" Background="Transparent" MouseDown="doodleCanvas_MouseDown" MouseMove="doodleCanvas_MouseMove" MouseUp="doodleCanvas_MouseUp" SizeChanged="doodleCanvas_SizeChanged" />
+        <InkCanvas Name="doodleCanvas" Margin="0" Background="Transparent" EditingMode="None" PreviewMouseDown="doodleCanvas_MouseDown" MouseMove="doodleCanvas_MouseMove" MouseUp="doodleCanvas_MouseUp" SizeChanged="doodleCanvas_SizeChanged" />
         <my:DoodleShapeSettingControl x:Name="shapeSetting" Visibility="Hidden"></my:DoodleShapeSettingControl>
     </Grid>
 </UserControl>

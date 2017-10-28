@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -34,6 +35,8 @@ namespace WPFDoodleBoard
         public bool mouseDown;
 
         private UIElement element;
+        private Stroke stroke;
+        private List<Point> eraserPointList;
         private SolidColorBrush brushColor;
 
 
@@ -204,17 +207,40 @@ namespace WPFDoodleBoard
             {
                 case DoodleEnumType.eraser:
                     {
+                        if (doodleCanvas is InkCanvas)
+                        {
+                            double eraserWidth = getEraserWidth();
+                            eraserPointList = new List<Point>();
+                            eraserPointList.Add(point);
+                            doodleCanvas.Strokes.Erase(eraserPointList, new RectangleStylusShape(eraserWidth, eraserWidth));
+                        }
                     }
                     break;
                 case DoodleEnumType.draw:
                     {
-                        Path path = new Path()
+                        if (doodleCanvas is InkCanvas)
                         {
-                            StrokeThickness = getBrushWidth(lineWidth),
-                            Stroke = getBrushColor(lineColor)
-                        };
-                        doodleCanvas.Children.Add(path);
-                        element = path;
+                            DrawingAttributes attributes = new DrawingAttributes();
+                            attributes.Color = getColor(lineColor);
+                            attributes.Width = attributes.Height = getBrushWidth(lineWidth);
+
+                            List<Point> pointList = new List<Point>();
+                            pointList.Add(point);
+
+                            Stroke s = new Stroke(new StylusPointCollection(pointList), attributes);
+                            doodleCanvas.Strokes.Add(s);
+                            stroke = s;
+                        }
+                        else if (doodleCanvas is Canvas)
+                        {
+                            Path path = new Path()
+                            {
+                                StrokeThickness = getBrushWidth(lineWidth),
+                                Stroke = getBrushColor(lineColor)
+                            };
+                            doodleCanvas.Children.Add(path);
+                            element = path;
+                        }
                     }
                     break;
                 case DoodleEnumType.rect:
@@ -311,31 +337,52 @@ namespace WPFDoodleBoard
             {
                 case DoodleEnumType.eraser:
                     {
+                        if (doodleCanvas is InkCanvas)
+                        {
+                            double eraserWidth = getEraserWidth();
+                            eraserPointList.Add(point);
+                            if (eraserPointList.Count > 5)
+                            {
+                                eraserPointList.RemoveAt(0);
+                            }
+                            doodleCanvas.Strokes.Erase(eraserPointList, new RectangleStylusShape(eraserWidth, eraserWidth));
+                        }
                     }
                     break;
                 case DoodleEnumType.draw:
                     {
-                        Path path = (Path)element;
-                        doodleCanvas.Children.Remove(path);
-                        PathFigure pathFigure = new PathFigure();
-                        pathFigure.StartPoint = getLocalPoint(model.points[0].GetPoint);
+                        if (doodleCanvas is InkCanvas)
+                        {
+                            List<Point> pointList = new List<Point>();
+                            pointList.Add(point);
 
-                        List<Point> controls = new List<Point>();
-                        for (int i = 0; i < model.points.Count; i++)
-                        {
-                            controls.AddRange(BezierControlPoints(model.points, i));
+                            Stroke s = stroke;
+                            s.StylusPoints.Add(new StylusPointCollection(pointList));
                         }
-                        for (int i = 1; i < model.points.Count; i++)
+                        else if (doodleCanvas is Canvas)
                         {
-                            BezierSegment bs = new BezierSegment(controls[i * 2 - 1], controls[i * 2], getLocalPoint(model.points[i].GetPoint), true);
-                            bs.IsSmoothJoin = true;
-                            pathFigure.Segments.Add(bs);
+                            Path path = (Path)element;
+                            doodleCanvas.Children.Remove(path);
+                            PathFigure pathFigure = new PathFigure();
+                            pathFigure.StartPoint = getLocalPoint(model.points[0].GetPoint);
+
+                            List<Point> controls = new List<Point>();
+                            for (int i = 0; i < model.points.Count; i++)
+                            {
+                                controls.AddRange(BezierControlPoints(model.points, i));
+                            }
+                            for (int i = 1; i < model.points.Count; i++)
+                            {
+                                BezierSegment bs = new BezierSegment(controls[i * 2 - 1], controls[i * 2], getLocalPoint(model.points[i].GetPoint), true);
+                                bs.IsSmoothJoin = true;
+                                pathFigure.Segments.Add(bs);
+                            }
+                            PathFigureCollection pathFigureCollection = new PathFigureCollection();
+                            pathFigureCollection.Add(pathFigure);
+                            PathGeometry pathGeometry = new PathGeometry(pathFigureCollection);
+                            path.Data = pathGeometry;
+                            doodleCanvas.Children.Add(path);
                         }
-                        PathFigureCollection pathFigureCollection = new PathFigureCollection();
-                        pathFigureCollection.Add(pathFigure);
-                        PathGeometry pathGeometry = new PathGeometry(pathFigureCollection);
-                        path.Data = pathGeometry;
-                        doodleCanvas.Children.Add(path);
                     }
                     break;
                 case DoodleEnumType.rect:
@@ -726,6 +773,15 @@ namespace WPFDoodleBoard
         }
 
         /// <summary>
+        /// 获取橡皮擦宽度
+        /// </summary>
+        /// <returns></returns>
+        private double getEraserWidth()
+        {
+            return 0.04 * doodleCanvas.ActualWidth;
+        }
+
+        /// <summary>
         /// 获取涂鸦的颜色
         /// </summary>
         /// <param name="color"></param>
@@ -749,6 +805,44 @@ namespace WPFDoodleBoard
                     break;
                 case DoodleEnumColor.red:
                     result = Brushes.Red;
+                    break;
+                default:
+                    break;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 获取涂鸦的颜色
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        private Color getColor(DoodleEnumColor color)
+        {
+            Color result = Colors.Black;
+            switch (color)
+            {
+                case DoodleEnumColor.black:
+                    result = Colors.Black;
+                    break;
+                case DoodleEnumColor.blue:
+                    result = Colors.Blue;
+                    break;
+                case DoodleEnumColor.red:
+                    result = Colors.Red;
+                    break;
+                case DoodleEnumColor.green:
+                    result = Colors.Green;
+                    break;
+                case DoodleEnumColor.orange:
+                    result = Colors.Orange;
+                    break;
+                case DoodleEnumColor.white:
+                    result = Colors.White;
+                    break;
+                case DoodleEnumColor.yellow:
+                    result = Colors.Yellow;
                     break;
                 default:
                     break;

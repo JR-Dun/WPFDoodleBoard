@@ -46,6 +46,11 @@ namespace WPFDoodleBoard
             doodle.SetDrawType(Doodle.DoodleEnum.DoodleEnumType.draw);
         }
 
+        private void buttonEraser_Click(object sender, RoutedEventArgs e)
+        {
+            doodle.SetDrawType(Doodle.DoodleEnum.DoodleEnumType.eraser);
+        }
+
         private void buttonLine_Click(object sender, RoutedEventArgs e)
         {
             doodle.SetDrawType(Doodle.DoodleEnum.DoodleEnumType.line);
